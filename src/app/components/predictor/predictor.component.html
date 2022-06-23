@@ -13,6 +13,12 @@
         </div>
         <br>
         <br>
+        <div class="p-field">
+            <label for="timeonly">Time / 12h</label><br>
+            <p-calendar formControlName="time" [timeOnly]="true" inputId="timeonly"></p-calendar>
+        </div>
+        <br>
+        <br>
         <button type="submit" pButton pRipple label="Aceptar" icon="pi pi-save"
 				class="p-button-success p-button-raised"></button>
     </form>
