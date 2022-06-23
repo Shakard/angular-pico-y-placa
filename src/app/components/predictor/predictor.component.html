@@ -1,0 +1,18 @@
+<h1>asfasfa</h1>
+
+
+    <form [formGroup]="formChair" (ngSubmit)="onSubmitChair()">
+        <div class="p-field">
+            <input id="plate" type="plate" pInputText formControlName="plate"
+                placeholder="Plate code" />
+        </div>
+        <br>
+        <br>
+        <div class="p-field">
+            <p-calendar formControlName="date" [readonlyInput]="true"></p-calendar>
+        </div>
+        <br>
+        <br>
+        <button type="submit" pButton pRipple label="Aceptar" icon="pi pi-save"
+				class="p-button-success p-button-raised"></button>
+    </form>
