@@ -1,54 +1,68 @@
-<h1>Pico y Placa</h1>
-<form [formGroup]="formPredictor" (ngSubmit)="onSubmit()">
-    <div class="p-field">
-        <div class="form-group">
-            <span class="p-float-label">
-                <input id="plate" pattern="[A-Z]{3}[-]\d{3,4}" type="text" pInputText formControlName="plate"
-                    (input)="formControl.plate.setValue(formControl.plate.value.toUpperCase())" class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && formControl.plate.errors }">
-                <label for="plate">Plate Number</label>
-            </span>
-            <div *ngIf="formControl.plate.errors" class="invalid-feedback">
-                <small *ngIf="formControl.plate.errors.required">
-                    *Plate number is required
-                </small>
-                <small *ngIf="formControl.plate.errors.maxlength">
-                    *Plate number should be less than 9 char.
-                </small>
-                <small *ngIf="formControl.plate.errors.minlength">
-                    *Plate number should be more than 6 char.
-                </small>
-                <small *ngIf="formControl.plate.errors.pattern">
-                    Plate number not valid.
-                </small>
-            </div>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400&display=swap" rel="stylesheet">
+
+<div class="login-page">
+        <div class="form" style="border-radius: 3px;">                  
+            <div>
+                <legend class="legend">Pico y Placa Predictor</legend>
+            </div><br><br>
+            <form [formGroup]="formPredictor" (ngSubmit)="onSubmit()">              
+                <div class="p-field">
+                    <div class="form-group">
+                        <span class="p-float-label">
+                            <input id="plate" pattern="[A,B,U,C,X,H,O,E,W,G,I,L,R,M,V,N,S,P,K,Q,T,Z,Y]{1}[A-Z]{2}[-]\d{3,4}" type="text" pInputText
+                                formControlName="plate"
+                                (input)="formControl.plate.setValue(formControl.plate.value.toUpperCase())"
+                                class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && formControl.plate.errors }">
+                            <label for="plate">Plate Number</label>
+                        </span>
+                        <div style="font-size: 10px; color: grey"> *The plate number should have this format (ABC-123 or ABC-1234)</div>
+                        <div *ngIf="formControl.plate.errors" class="invalid-feedback">
+                            <small *ngIf="submitted && formControl.plate.errors.required">
+                                *Plate number is required
+                            </small>
+                            <small *ngIf="formControl.plate.errors.maxlength">
+                                *Plate number should be less than 9 characters.
+                            </small>
+                            <small *ngIf="formControl.plate.errors.minlength">
+                                *Plate number should be more than 6 characters.
+                            </small>
+                            <small *ngIf="formControl.plate.errors.pattern">
+                                *Plate number not valid.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="p-field">
+                    <p-calendar formControlName="date" placeholder="Date" [readonlyInput]="true" inputId="calendar" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && formControl.date.errors }">
+                    </p-calendar>
+                    <div *ngIf="submitted && formControl.date.errors" class="invalid-feedback">
+                        <small *ngIf="formControl.date.errors.required">
+                            *Date is required
+                        </small>
+                    </div>
+                </div>
+                <br>
+                <div class="p-field">
+                    <p-calendar formControlName="time" placeholder="Time" [timeOnly]="true" inputId="timeonly" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && formControl.time.errors }"></p-calendar>
+                    <div *ngIf="submitted && formControl.time.errors" class="invalid-feedback">
+                        <small *ngIf="formControl.time.errors.required">
+                            *Time is required
+                        </small>
+                    </div>
+                </div>
+                <br>
+                <button type="submit" pButton pRipple label="Aceptar" class="p-button-success p-button-raised"></button>
+            </form>
         </div>
+</div>
+<section id="copy-right">
+    <div class="copy-right-sec"><i class="fa-solid fa-copyright"></i>  
+        <img src="https://www.stackbuilders.com/documents/4/SB_Logo_BsgCyNY.svg" alt="Stack Builders">
     </div>
-    <br>
-    <br>
-    <div class="p-field">
-        <label for="calendar">Date</label><br>
-        <p-calendar formControlName="date" [readonlyInput]="true" inputId="calendar" class="form-control"
-            [showIcon]="true" [ngClass]="{ 'is-invalid': submitted && formControl.date.errors }"></p-calendar>
-        <div *ngIf="submitted && formControl.date.errors" class="invalid-feedback">
-            <small *ngIf="formControl.date.errors.required">
-                *Date is required
-            </small>
-        </div>
-    </div>
-    <br>
-    <br>
-    <div class="p-field">
-        <label for="timeonly">Time / 24h</label><br>
-        <p-calendar formControlName="time" [timeOnly]="true" inputId="timeonly" class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && formControl.time.errors }"></p-calendar>
-        <div *ngIf="submitted && formControl.time.errors" class="invalid-feedback">
-            <small *ngIf="formControl.time.errors.required">
-                *Time is required
-            </small>
-        </div>
-    </div>
-    <br>
-    <br>
-    <button type="submit" pButton pRipple label="Aceptar" class="p-button-success p-button-raised"></button>
-</form>
+</section>
