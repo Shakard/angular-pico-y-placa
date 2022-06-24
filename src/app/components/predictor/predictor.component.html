@@ -54,7 +54,7 @@
             <br>
             <!-- Time input field -->
             <div class="p-field">
-                <p-calendar formControlName="time" placeholder="Time" [timeOnly]="true" inputId="timeonly"
+                <p-calendar formControlName="time" placeholder="Time" [readonlyInput]="true" [timeOnly]="true" inputId="timeonly"
                     class="form-control" [ngClass]="{ 'is-invalid': submitted && formControl.time.errors }">
                 </p-calendar>
                 <div *ngIf="submitted && formControl.time.errors" class="invalid-feedback">
