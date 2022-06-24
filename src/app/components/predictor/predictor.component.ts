@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { WeekDay } from 'src/app/models/week-day';
 import { DayService } from 'src/app/services/day.service';
+import { SweetMessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: 'app-predictor',
@@ -18,10 +18,11 @@ export class PredictorComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dayService: DayService,
-    ) { }
+    private messageService: SweetMessageService
+  ) { }
 
   ngOnInit(): void {
-    this.buildFormChair();       
+    this.buildFormChair();
   }
 
   buildFormChair() {
@@ -53,19 +54,21 @@ export class PredictorComponent implements OnInit {
   }
 
   getTime() {
-    this.time = ((this.formChair.get(`time`)?.value.getMinutes())*0.01) + this.formChair.get(`time`)?.value.getHours()
+    this.time = ((this.formChair.get(`time`)?.value.getMinutes()) * 0.01) + this.formChair.get(`time`)?.value.getHours()
   }
 
   predictor() {
-    const selectedDay = this.searchDayValue(this.formChair.get(`date`)?.value.getDay())
+    const selectedDay = this.searchDayValue(this.formChair.get(`date`)?.value.getDay())    
+    var plateNumber = this.formChair.get('plate')?.value;
+    var plateNumber = plateNumber.slice(plateNumber.length - 1);    
+     
     if (selectedDay.name == "Sunday" || selectedDay.name == "Saturday") {
-      console.log('Happy Driving');      
+      this.messageService.canDriveMessage();
     } else {
-      console.log(selectedDay);      
-      if ((this.time >= selectedDay.morningTime[0] && this.time <= selectedDay.morningTime[1]) || (this.time >= selectedDay.nightTime[0] && this.time <= selectedDay.nightTime[1])) {
-        console.log('Cant Drive');
+      if (((this.time >= selectedDay.morningTime[0] && this.time <= selectedDay.morningTime[1]) || (this.time >= selectedDay.nightTime[0] && this.time <= selectedDay.nightTime[1])) && (selectedDay.lastNumber[0] == plateNumber || selectedDay.lastNumber[1] == plateNumber)) {
+        this.messageService.canNotDriveMessage();
       } else {
-        console.log('Lucky');                
+        this.messageService.canDriveMessage();
       }
     }
   }
