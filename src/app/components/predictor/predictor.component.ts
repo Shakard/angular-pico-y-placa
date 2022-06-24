@@ -9,9 +9,8 @@ import { SweetMessageService } from 'src/app/services/message.service';
   styleUrls: ['./predictor.component.scss']
 })
 export class PredictorComponent implements OnInit {
-  formChair: FormGroup;
+  formPredictor: FormGroup;
   minute: number;
-  hour: number;
   time: number;
   submitted = false;
 
@@ -22,11 +21,11 @@ export class PredictorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.buildFormChair();
+    this.buildFormPredictor();
   }
 
-  buildFormChair() {
-    this.formChair = this.formBuilder.group({
+  buildFormPredictor() {
+    this.formPredictor = this.formBuilder.group({
       plate: [null, [Validators.required, Validators.minLength(7), Validators.maxLength(8)]],
       date: [null, Validators.required],
       time: [null, Validators.required]
@@ -34,15 +33,14 @@ export class PredictorComponent implements OnInit {
   }
 
   // convenience getter for easy access to form fields
-  get f() {
-    return this.formChair.controls;
+  get formControl() {
+    return this.formPredictor.controls;
   }
 
-  onSubmitChair() {
+  onSubmit() {
     this.submitted = true;
-
     // stop here if form is invalid
-    if (this.formChair.invalid) {
+    if (this.formPredictor.invalid) {
       return;
     }
     this.getTime();
@@ -54,14 +52,14 @@ export class PredictorComponent implements OnInit {
   }
 
   getTime() {
-    this.time = ((this.formChair.get(`time`)?.value.getMinutes()) * 0.01) + this.formChair.get(`time`)?.value.getHours()
+    this.time = ((this.formPredictor.get(`time`)?.value.getMinutes()) * 0.01) + this.formPredictor.get(`time`)?.value.getHours()
   }
 
   predictor() {
-    const selectedDay = this.searchDayValue(this.formChair.get(`date`)?.value.getDay())    
-    var plateNumber = this.formChair.get('plate')?.value;
-    var plateNumber = plateNumber.slice(plateNumber.length - 1);    
-     
+    const selectedDay = this.searchDayValue(this.formPredictor.get(`date`)?.value.getDay())
+    var plateNumber = this.formPredictor.get('plate')?.value;
+    var plateNumber = plateNumber.slice(plateNumber.length - 1);
+
     if (selectedDay.name == "Sunday" || selectedDay.name == "Saturday") {
       this.messageService.canDriveMessage();
     } else {
