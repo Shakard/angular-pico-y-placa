@@ -13,6 +13,7 @@ export class PredictorComponent implements OnInit {
   minute: number;
   hour: number;
   time: number;
+  submitted = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -20,23 +21,29 @@ export class PredictorComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-    this.buildFormChair();   
+    this.buildFormChair();       
   }
 
   buildFormChair() {
     this.formChair = this.formBuilder.group({
-      id: [null],
-      plate: [null],
-      date: [null],
-      time: [null]
+      plate: [null, [Validators.required, Validators.minLength(7), Validators.maxLength(8)]],
+      date: [null, Validators.required],
+      time: [null, Validators.required]
     });
   }
 
-  get userIdField() {
-    return this.formChair.get('date');
+  // convenience getter for easy access to form fields
+  get f() {
+    return this.formChair.controls;
   }
 
   onSubmitChair() {
+    this.submitted = true;
+
+    // stop here if form is invalid
+    if (this.formChair.invalid) {
+      return;
+    }
     this.getTime();
     this.predictor();
   }
@@ -47,7 +54,6 @@ export class PredictorComponent implements OnInit {
 
   getTime() {
     this.time = ((this.formChair.get(`time`)?.value.getMinutes())*0.01) + this.formChair.get(`time`)?.value.getHours()
-    console.log(this.time);    
   }
 
   predictor() {
