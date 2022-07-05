@@ -36,4 +36,29 @@ export class DayService {
   public getWeekDays(): WeekDay[] {
     return this.DAYS;
   }
+  // I search for the day of the week by its value
+  searchDayValue(value: number) {
+    return this.getWeekDays().filter(x => x.value == value)[0];
+  }
+  // Validate if the time is in the range of the morning time
+  canDrive(time: number, morningTime1: number, morningTime2: number): boolean {
+    if (time >= morningTime1 && time <= morningTime2) {
+      return true;
+    }
+    return false;
+  }
+  // Returns true if the day is weekend
+  isWeekend(day: String): boolean {
+    if (day == "Sunday" || day == "Saturday") {
+      return true;
+    }
+    return false;
+  }
+  // Returns true if the last number of the license is the same as the selected day
+  isLastNumber(plateNumber:number, lastNumber1: number, lastNumber2: number): boolean {
+    if (lastNumber1 == plateNumber || lastNumber2 == plateNumber) {
+    return true;
+    }
+    return false;
+  }
 }

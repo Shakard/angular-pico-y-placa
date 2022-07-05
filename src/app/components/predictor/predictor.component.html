@@ -67,17 +67,17 @@
         </form>
         <!-- buttons -->
         <div style="display: grid; grid-template-columns: 40% 20% 40%;">
-            <button (click)="onSubmit()" pButton pRipple label="Aceptar"
-                class="p-button-success p-button-raised"></button>
+            <button id="rst-button" (click)="resetForm()" pButton pRipple label="Reset"
+            class="p-button-success p-button-raised"></button>            
             <div></div>
-            <button (click)="resetForm()" pButton pRipple label="Reset"
-                class="p-button-success p-button-raised"></button>
+            <button id="submit-button" (click)="onSubmit()" pButton pRipple label="Predict"
+                class="p-button-success p-button-raised"></button>        
         </div>
     </div>
 </div>
 <!-- Footer -->
 <section id="footer">
     <div class="footer-sec">
-        <img src="https://www.stackbuilders.com/documents/4/SB_Logo_BsgCyNY.svg" alt="Stack Builders">
+        <img src="" alt="">
     </div>
 </section>

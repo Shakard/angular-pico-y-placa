@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { WeekDay } from 'src/app/models/week-day';
 import { DayService } from 'src/app/services/day.service';
 import { SweetMessageService } from 'src/app/services/message.service';
 
@@ -14,6 +15,7 @@ export class PredictorComponent implements OnInit {
   time: number;
   submitted = false;
   plateNumber: number;
+  selectedDay: WeekDay;
   // Needed services are injected
   constructor(
     private formBuilder: FormBuilder,
@@ -36,10 +38,6 @@ export class PredictorComponent implements OnInit {
   get formControl() {
     return this.formPredictor.controls;
   }
-  // I search for the day of the week by its value
-  searchDayValue(value: number) {
-    return this.dayService.getWeekDays().filter(x => x.value == value)[0];
-  }
   // Get the hours and minutes of the input and join them
   getTime() {
     this.time = ((this.formPredictor.get(`time`)?.value.getMinutes()) * 0.01) + this.formPredictor.get(`time`)?.value.getHours()
@@ -49,14 +47,33 @@ export class PredictorComponent implements OnInit {
     const rawPlate = this.formPredictor.get('plate')?.value;
     this.plateNumber = rawPlate.slice(rawPlate.length - 1);
   }
+  // Get the selected day
+  getDay() {
+    this.selectedDay = this.dayService.searchDayValue(this.formPredictor.get(`date`)?.value.getDay());
+  }
+  // Validates the morning time of the day
+  canDriveMorning() {
+    return this.dayService.canDrive(this.time, this.selectedDay.morningTime[0], this.selectedDay.morningTime[1]);
+  }
+  // Validates the night time of the day
+  canDriveNight() {
+    return this.dayService.canDrive(this.time, this.selectedDay.nightTime[0], this.selectedDay.nightTime[1]);
+  }
+  // Returns true if the day is weekend
+  isWeekend() {
+    return this.dayService.isWeekend(this.selectedDay.name);
+  }
+  // Returns true if the last number of the license is the same as the selected day
+  isPlateLastNumber() {
+    return this.dayService.isLastNumber(this.plateNumber, this.selectedDay.lastNumber[0], this.selectedDay.lastNumber[1]);
+  }
 
   predictor() {
-    // Get the selected day from the date input, discard Saturdays and Sundays, and check the conditions
-    const selectedDay = this.searchDayValue(this.formPredictor.get(`date`)?.value.getDay())
-    if (selectedDay.name == "Sunday" || selectedDay.name == "Saturday") {
+    // Discard Saturdays and Sundays, and check the conditions
+    if (this.isWeekend()) {
       this.messageService.canDriveMessage();
     } else {
-      if (((this.time >= selectedDay.morningTime[0] && this.time <= selectedDay.morningTime[1]) || (this.time >= selectedDay.nightTime[0] && this.time <= selectedDay.nightTime[1])) && (selectedDay.lastNumber[0] == this.plateNumber || selectedDay.lastNumber[1] == this.plateNumber)) {
+      if ((this.canDriveMorning() || this.canDriveNight()) && this.isPlateLastNumber()) {
         this.messageService.canNotDriveMessage();
       } else {
         this.messageService.canDriveMessage();
@@ -70,6 +87,7 @@ export class PredictorComponent implements OnInit {
     if (this.formPredictor.invalid) {
       return;
     }
+    this.getDay();
     this.getPlateNumber();
     this.getTime();
     this.predictor();
